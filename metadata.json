@@ -1,0 +1,6 @@
+{
+  "name": "MediCare Reminder",
+  "description": "A comprehensive, high-quality Medicine and Appointment Reminder application with interactive Pill Alerts, Family SMS simulation, and Gemini-powered Prescription OCR Scanner.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
