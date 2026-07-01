@@ -3,17 +3,20 @@ import path from "path";
 import { fileURLToPath } from "url";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
-const PORT = 3000;
+const PORT = 3000; // Moving back to the standard port
 
+app.use(cors());
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
+// ONLY the OCR route is kept here because Gemini requires a server proxy
 app.post("/api/ocr-prescription", async (req, res) => {
   try {
     let { imageBase64, mimeType } = req.body;
@@ -21,8 +24,6 @@ app.post("/api/ocr-prescription", async (req, res) => {
 
     const cleanBase64 = imageBase64.includes(",") ? imageBase64.split(",")[1] : imageBase64;
     const apiKey = process.env.GEMINI_API_KEY;
-
-    // FIX: Using gemini-3.5-flash which showed up in your success list
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${apiKey}`;
 
     const payload = {
@@ -35,8 +36,6 @@ app.post("/api/ocr-prescription", async (req, res) => {
       generationConfig: { response_mime_type: "application/json" }
     };
 
-    console.log("AI: Processing with gemini-3.5-flash...");
-    
     const response = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -44,26 +43,19 @@ app.post("/api/ocr-prescription", async (req, res) => {
     });
 
     const result: any = await response.json();
-
-    if (!response.ok) {
-      console.error("Google API Error:", JSON.stringify(result, null, 2));
-      throw new Error(result.error?.message || "Google API Error");
-    }
-
     const textResponse = result.candidates[0].content.parts[0].text;
     res.json(JSON.parse(textResponse));
-    console.log("✅ Scan Successful with 3.5 Flash!");
-
   } catch (error: any) {
-    console.error("SCANNER ERROR:", error.message);
-    res.status(500).json({ error: "Scan failed", details: error.message });
+    res.status(500).json({ error: "Scan failed" });
   }
 });
 
 async function setupVite() {
   const vite = await createViteServer({ server: { middlewareMode: true }, appType: "spa" });
   app.use(vite.middlewares);
-  app.listen(PORT, "0.0.0.0", () => console.log(`🚀 Server ready at http://localhost:${PORT}`));
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`🚀 App is back to normal at http://localhost:${PORT}`);
+  });
 }
 
 setupVite();
