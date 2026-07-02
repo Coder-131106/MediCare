@@ -98,7 +98,7 @@ export default function PrescriptionOCRScanner({ onImportMedicines }: Prescripti
             <FileText className="w-5 h-5 text-indigo-500" />
             Prescription Scanner
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">Digitally scan & extract medicine regimes using Gemini AI</p>
+          <p className="text-xs text-slate-400 mt-0.5">Digitally scan & extract medicine regimes</p>
         </div>
       </div>
 
@@ -179,7 +179,7 @@ export default function PrescriptionOCRScanner({ onImportMedicines }: Prescripti
             className="p-10 flex flex-col items-center justify-center text-center bg-slate-50 rounded-2xl border border-slate-100"
           >
             <RefreshCw className="w-10 h-10 text-indigo-500 animate-spin mb-4" />
-            <h4 className="font-bold text-slate-800 text-base">Gemini OCR Engine Analyzing...</h4>
+            <h4 className="font-bold text-slate-800 text-base">Analyzing the Uploaded Prescription</h4>
             <p className="text-xs text-slate-400 max-w-xs mt-2">
               Reading doctor's handwriting, matching medicine names, and translating dosage schedules. This will take just a moment.
             </p>
