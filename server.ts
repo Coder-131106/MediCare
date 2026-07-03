@@ -55,31 +55,50 @@ app.post("/api/verify-otp", (req, res) => {
 app.post("/api/ocr-prescription", async (req, res) => {
   try {
     let { imageBase64, mimeType } = req.body;
+    if (!imageBase64) return res.status(400).json({ error: "No image received" });
+
     const apiKey = process.env.GEMINI_API_KEY;
-    // Using 1.5-flash (3.5 does not exist yet)
     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
     const cleanBase64 = imageBase64.includes(",") ? imageBase64.split(",")[1] : imageBase64;
 
     const payload = {
       contents: [{
         parts: [
-          { text: "Extract medications into JSON: {\"medicines\": [{\"name\": \"Name\", \"dosage\": \"Dose\", \"time\": \"\"}]}" },
+          { text: "Analyze this prescription. Extract medications into JSON: {\"medicines\": [{\"name\": \"Name\", \"dosage\": \"Dose\", \"time\": \"\"}]}" },
           { inline_data: { mime_type: mimeType || "image/jpeg", data: cleanBase64 } }
         ]
       }],
       generationConfig: { response_mime_type: "application/json" }
     };
 
-    const response = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
     const result: any = await response.json();
-    
-    // Clean up the text response from AI
-    let textResponse = result.candidates[0].content.parts[0].text;
+
+    // --- SAFETY CHECK START ---
+    if (!result.candidates || result.candidates.length === 0) {
+      console.error("❌ Gemini AI Error:", JSON.stringify(result, null, 2));
+      
+      // Check if it was blocked by safety filters
+      if (result.promptFeedback?.blockReason) {
+        return res.status(422).json({ error: "Scan blocked by AI safety filters. Try a clearer photo." });
+      }
+      
+      return res.status(500).json({ error: "AI failed to generate a result. Please try again." });
+    }
+    // --- SAFETY CHECK END ---
+
+    const textResponse = result.candidates[0].content.parts[0].text;
+    console.log("✅ Scan Successful!");
     res.json(JSON.parse(textResponse));
-    console.log("✅ Scanner processed successfully");
-  } catch (error) { 
-    console.error("❌ Scanner Error:", error);
-    res.status(500).json({ error: "Scan failed" }); 
+
+  } catch (error: any) {
+    console.error("SCANNER ERROR:", error.message);
+    res.status(500).json({ error: "Scan failed", details: error.message });
   }
 });
 
