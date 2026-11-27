@@ -87,4 +87,3 @@ http://localhost:3000
 Software Development Intern | 22 June 2026 – 04 July 2026
 
 Developed MediCare as part of the internship, gaining practical experience in full-stack development, AI integration, REST API development and email services.
-
