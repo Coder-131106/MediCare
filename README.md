@@ -1,24 +1,94 @@
-<<<<<<< HEAD
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# MediCare – AI-Powered Medicine Reminder and Healthcare Management System
 
-# Run and deploy your AI Studio app
+## About the Project
 
-This contains everything you need to run your app locally.
+MediCare is an AI-powered healthcare web application developed during the **Centre for Entrepreneurship Development (CED) Software Development Internship**.
 
-View your app in AI Studio: https://ai.studio/apps/6f3e10d2-1e16-4496-91ec-baecade85c8f
+The application helps users manage their medicines, appointments and basic health information. It also uses AI to analyse prescription images and extract medicine details, reducing the need to enter them manually.
 
-## Run Locally
+## Features
 
-**Prerequisites:**  Node.js
+- **Medicine Management:** Add and manage medicine details and dosage information.
+- **Medicine Reminders:** Help users keep track of their medicine schedules.
+- **Appointment Management:** Manage healthcare appointments.
+- **Patient Profiles:** Maintain basic user and health-related information.
+- **AI Prescription Scanner:** Use Gemini AI to analyse prescription images and extract medicine details.
+- **Email OTP Verification:** Send verification codes to users through email.
+- **Email Notifications:** Support email-based communication and reminders.
+- **Health Tips:** Provide useful healthcare information.
 
+## Technologies Used
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
-=======
-# MediCare
->>>>>>> b248584355e4c302942adc0ac81e37f2b8af7a1b
+**Frontend**
+- React.js
+- TypeScript
+- Vite
+- Tailwind CSS
+
+**Backend**
+- Node.js
+- Express.js
+- REST APIs
+
+**AI and Integrations**
+- Google Gemini AI
+- Nodemailer
+- Axios
+
+## How It Works
+
+1. Users access the MediCare web application.
+2. Users manage their medicine details and schedules.
+3. Prescription images can be uploaded for AI-based analysis.
+4. Gemini AI extracts medicine information from the prescription.
+5. Users can manage appointments and profile information.
+6. Email services support OTP verification and notifications.
+
+## Installation and Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Coder-131106/MediCare.git
+cd MediCare
+```
+
+### 2. Install Dependencies
+
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the project root and add your Gemini API key:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+```
+
+Email credentials should also be moved into environment variables before running the application. Never upload API keys, passwords or other secrets to GitHub.
+
+### 4. Run the Application
+
+```bash
+npm run dev
+```
+
+Open the application at:
+
+```text
+http://localhost:3000
+```
+
+## Internship Experience
+
+**Centre for Entrepreneurship Development (CED), Anna University**  
+Software Development Intern | 22 June 2026 – 04 July 2026
+
+Developed MediCare as part of the internship, gaining practical experience in full-stack development, AI integration, REST API development and email services.
+
+## Author
+
+**Sowjanya P.**  
+B.Tech – Information Technology
